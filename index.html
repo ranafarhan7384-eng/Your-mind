@@ -2,20 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grow With Mind</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Grow With Mind - Login Protected</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      padding: 50px;
+    }
+    #login-form, #main-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome To Farhan Zone</h1>
-  <p>LET'S GROW!</p>
-  <button onclick="showMessage()">Click Me</button>
 
-  <!-- ✅ Firebase Setup (Correct Way) -->
+  <!-- 🔐 Login Form (Only visible before login) -->
+  <div id="login-form">
+    <h2>Login to Access</h2>
+    <input type="email" id="email" placeholder="Enter email">
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- ✅ Main Website Content (Visible after login) -->
+  <div id="main-content" style="display: none;">
+    <h1>Welcome to Farhan Zone</h1>
+    <p>LET'S GROW!</p>
+    <button onclick="alert('Welcome!')">Click Me</button>
+    <br><br>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <!-- 🔧 Firebase Auth Script -->
   <script type="module">
-    // Import Firebase functions from CDN
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Your Firebase configuration (this is your original config)
     const firebaseConfig = {
       apiKey: "AIzaSyBBzL7JXM6_w5IdOm6m2R1U09xU-XboJ54",
       authDomain: "devil-project-670a7.firebaseapp.com",
@@ -25,11 +63,34 @@
       appId: "1:302288491954:web:b1fc2cf61fd585e88f80ab"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-  </script>
+    const auth = getAuth(app);
 
-  <!-- ✅ Your Own JS File -->
-  <script src="script.js"></script>
+    // 🔐 Login Function
+    window.login = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => alert("Login successful!"))
+        .catch(error => alert("Login failed: " + error.message));
+    };
+
+    // 🚪 Logout Function
+    window.logout = function () {
+      signOut(auth).then(() => alert("Logged out successfully."));
+    };
+
+    // 👁‍🗨 Show/Hide based on login
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("main-content").style.display = "block";
+      } else {
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("main-content").style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>

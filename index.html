@@ -1,55 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Grow With Mind - Login Protected</title>
+  <meta charset="UTF-8" />
+  <title>Grow With Mind - Login</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f0f0f0;
-      padding: 50px;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
     }
-    #login-form, #main-content {
-      background-color: white;
-      padding: 30px;
-      border-radius: 10px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    .container {
+      background: #ffffff;
+      color: #333;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+    }
+    .container h2 {
+      margin-bottom: 20px;
     }
     input {
-      display: block;
       width: 90%;
-      margin: 10px auto;
-      padding: 10px;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
     button {
-      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 16px;
+    }
+    #main-content {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- 🔐 Login Form (Only visible before login) -->
-  <div id="login-form">
-    <h2>Login to Access</h2>
-    <input type="email" id="email" placeholder="Enter email">
-    <input type="password" id="password" placeholder="Enter password">
+  <!-- Login UI -->
+  <div class="container" id="login-form">
+    <h2>🔐 Login to Continue</h2>
+    <input type="email" id="email" placeholder="Email address" />
+    <input type="password" id="password" placeholder="Password" />
     <button onclick="login()">Login</button>
   </div>
 
-  <!-- ✅ Main Website Content (Visible after login) -->
-  <div id="main-content" style="display: none;">
-    <h1>Welcome to Farhan Zone</h1>
-    <p>LET'S GROW!</p>
-    <button onclick="alert('Welcome!')">Click Me</button>
-    <br><br>
+  <!-- Protected content -->
+  <div class="container" id="main-content">
+    <h1>Welcome to Farhan Zone 🎉</h1>
+    <p>Let's Grow!</p>
     <button onclick="logout()">Logout</button>
   </div>
 
-  <!-- 🔧 Firebase Auth Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -66,22 +80,21 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // 🔐 Login Function
-    window.login = function () {
+    // Login
+    window.login = () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => alert("Login successful!"))
-        .catch(error => alert("Login failed: " + error.message));
+        .then(() => alert("✅ Login successful!"))
+        .catch((err) => alert("❌ " + err.message));
     };
 
-    // 🚪 Logout Function
-    window.logout = function () {
-      signOut(auth).then(() => alert("Logged out successfully."));
+    // Logout
+    window.logout = () => {
+      signOut(auth).then(() => alert("🚪 Logged out!"));
     };
 
-    // 👁‍🗨 Show/Hide based on login
+    // Show content after login
     onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById("login-form").style.display = "none";

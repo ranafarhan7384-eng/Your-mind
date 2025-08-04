@@ -6,10 +6,30 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Wellcome To Farhan Zone</h1>
-  <p>LET,S GROW!</p>
+  <h1>Welcome To Farhan Zone</h1>
+  <p>LET'S GROW!</p>
   <button onclick="showMessage()">Click Me</button>
 
+  <!-- ✅ Firebase Setup (Correct Way) -->
+  <script type="module">
+    // Import Firebase functions from CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    // Your Firebase configuration (this is your original config)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBzL7JXM6_w5IdOm6m2R1U09xU-XboJ54",
+      authDomain: "devil-project-670a7.firebaseapp.com",
+      projectId: "devil-project-670a7",
+      storageBucket: "devil-project-670a7.appspot.com",
+      messagingSenderId: "302288491954",
+      appId: "1:302288491954:web:b1fc2cf61fd585e88f80ab"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
+
+  <!-- ✅ Your Own JS File -->
   <script src="script.js"></script>
 </body>
 </html>

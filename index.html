@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Firebase Google Login</title>
+  <meta charset="UTF-8">
+  <title>Grow With Mind</title>
   <script type="module">
-    // Import Firebase SDK
+    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyBBzL7JXM6_w5IdOm6m2R1U09xU-XboJ54",
       authDomain: "devil-project-670a7.firebaseapp.com",
       projectId: "devil-project-670a7",
-      storageBucket: "devil-project-670a7.firebasestorage.app",
+      storageBucket: "devil-project-670a7.appspot.com",
       messagingSenderId: "302288491954",
       appId: "1:302288491954:web:5135d9da28d6b5a08f80ab"
     };
@@ -22,50 +23,44 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Sign In function
-    window.login = async function() {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        document.getElementById("login-section").style.display = "none";
-        document.getElementById("user-info").style.display = "block";
-        document.getElementById("user-name").innerText = user.displayName;
-        document.getElementById("user-email").innerText = user.email;
-      } catch (error) {
-        alert("Login failed: " + error.message);
-      }
-    }
-
-    // Sign Out function
-    window.logout = async function() {
-      await signOut(auth);
-      document.getElementById("login-section").style.display = "block";
-      document.getElementById("user-info").style.display = "none";
-    }
-
-    // Auto update UI
+    // Check user login
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        document.getElementById("content").style.display = "block";
         document.getElementById("login-section").style.display = "none";
-        document.getElementById("user-info").style.display = "block";
         document.getElementById("user-name").innerText = user.displayName;
-        document.getElementById("user-email").innerText = user.email;
       } else {
+        document.getElementById("content").style.display = "none";
         document.getElementById("login-section").style.display = "block";
-        document.getElementById("user-info").style.display = "none";
       }
     });
+
+    // Login
+    window.login = () => {
+      signInWithPopup(auth, provider).catch((error) => {
+        alert("Login error: " + error.message);
+      });
+    };
+
+    // Logout
+    window.logout = () => {
+      signOut(auth);
+    };
   </script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    #content { display: none; }
+  </style>
 </head>
 <body>
   <div id="login-section">
-    <h2>Login Required</h2>
+    <h2>Welcome to Grow With Mind</h2>
     <button onclick="login()">Continue with Google</button>
   </div>
 
-  <div id="user-info" style="display:none;">
-    <h2>Welcome, <span id="user-name"></span></h2>
-    <p>Email: <span id="user-email"></span></p>
+  <div id="content">
+    <h1>Hello, <span id="user-name"></span>!</h1>
+    <p>Welcome to the secure area of the site.</p>
     <button onclick="logout()">Logout</button>
   </div>
 </body>
